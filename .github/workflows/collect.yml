@@ -1,0 +1,24 @@
+name: collect
+
+on:
+  schedule:
+    - cron: "0 0,12 * * *"
+  workflow_dispatch:
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python collect.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          TP_TOKEN: ${{ secrets.TP_TOKEN }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          EXIM_KEY: ${{ secrets.EXIM_KEY }}
